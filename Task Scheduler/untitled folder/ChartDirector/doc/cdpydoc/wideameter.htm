@@ -1,0 +1,144 @@
+<HTML>
+<HEAD>
+<Title>Wide Angular Meters</Title>
+<link type='text/css' rel='Stylesheet' href="maxchartapi.css" />
+</HEAD>
+<body bgcolor="#FFFFFF" text="#000000" topmargin="0" leftmargin="0" rightmargin="0" marginwidth="0" marginheight="0">
+
+<p class="heading0">ChartDirector 5.1 (Python Edition)</p>
+<p class="heading1">Wide Angular Meters</p>
+<hr class="separator">
+<div class="content">
+<img src="images/wideameter0.png">&nbsp;&nbsp;<img src="images/wideameter1.png">&nbsp;&nbsp;<img src="images/wideameter2.png">&nbsp;&nbsp;<img src="images/wideameter3.png">&nbsp;&nbsp;<img src="images/wideameter4.png">&nbsp;&nbsp;<img src="images/wideameter5.png">
+<br><br>
+This example demonstrates angular meters of which the width is large compared to the height. It also demonstrates various background effects.<br><br>
+The meters in this example are created by using large meter radii, but small angular spans. The center (pivot for the pointer) can then be put outside the meter region and the meters can be reduced in height.<br><br>
+This example also demonstrates metallic background effects and background patterns. The backgrounds are configured using <a href="BaseChart.setBackground.htm">BaseChart.setBackground</a>. The metallic colors are created using <a href="pychartdir.goldColor.htm">pychartdir.goldColor</a>, <a href="pychartdir.silverColor.htm">pychartdir.silverColor</a> and <a href="pychartdir.metalColor.htm">pychartdir.metalColor</a>. The background patterns are created by loading image files as pattern colors using <a href="BaseChart.patternColor2.htm">BaseChart.patternColor2</a>.<br><br>
+This example also shows the effect of the semi-transparent pointers, which can avoid blocking the labels on the meter.
+</div>
+<p class="heading1a">Source Code Listing</p>
+<div class="content">
+<b>[Standalone Version]</b> pythondemo\wideameter.py
+<table width="98%" border="0" cellpadding="10"><tr><td bgcolor="#cccccc"><pre>#!/usr/bin/python
+from pychartdir import *
+
+def createChart(img) :
+
+    # The value to display on the meter
+    value = 6.5
+
+    # Create an AugularMeter object of size 200 x 100 pixels with rounded corners
+    m = AngularMeter(200, 100)
+    m.setRoundedFrame()
+
+    # Set meter background according to a parameter
+    if img == "0" :
+        # Use gold background color
+        m.setBackground(goldColor(), 0x000000, -2)
+    elif img == "1" :
+        # Use silver background color
+        m.setBackground(silverColor(), 0x000000, -2)
+    elif img == "2" :
+        # Use metallic blue (9898E0) background color
+        m.setBackground(metalColor(0x9898e0), 0x000000, -2)
+    elif img == "3" :
+        # Use a wood pattern as background color
+        m.setBackground(m.patternColor2("wood.png"), 0x000000, -2)
+    elif img == "4" :
+        # Use a marble pattern as background color
+        m.setBackground(m.patternColor2("marble.png"), 0x000000, -2)
+    else :
+        # Use a solid light purple (EEBBEE) background color
+        m.setBackground(0xeebbee, 0x000000, -2)
+
+    # Set the meter center at (100, 235), with radius 210 pixels, and span from -24
+    # to +24 degress
+    m.setMeter(100, 235, 210, -24, 24)
+
+    # Meter scale is 0 - 100, with a tick every 1 unit
+    m.setScale(0, 10, 1)
+
+    # Set 0 - 6 as green (99ff99) zone, 6 - 8 as yellow (ffff00) zone, and 8 - 10 as
+    # red (ff3333) zone
+    m.addZone(0, 6, 0x99ff99, 0x808080)
+    m.addZone(6, 8, 0xffff00, 0x808080)
+    m.addZone(8, 10, 0xff3333, 0x808080)
+
+    # Add a title at the bottom of the meter using 10 pts Arial Bold font
+    m.addTitle2(Bottom, "OUTPUT POWER LEVEL\n", "arialbd.ttf", 10)
+
+    # Add a semi-transparent black (80000000) pointer at the specified value
+    m.addPointer(value, 0x80000000)
+
+    # Output the chart
+    m.makeChart("wideameter%s.png" % img)
+
+
+createChart("0")
+createChart("1")
+createChart("2")
+createChart("3")
+createChart("4")
+createChart("5")</pre></td></tr></table><br><b>[CGI Version]</b> pythondemo_cgi\wideameter.py
+<table width="98%" border="0" cellpadding="10"><tr><td bgcolor="#cccccc"><pre>#!/usr/bin/python
+from pychartdir import *
+import cgi, os
+
+# Get HTTP query parameters
+query = cgi.FieldStorage()
+
+# The value to display on the meter
+value = 6.5
+
+# Create an AugularMeter object of size 200 x 100 pixels with rounded corners
+m = AngularMeter(200, 100)
+m.setRoundedFrame()
+
+# Set meter background according to a parameter
+if query["img"].value == "0" :
+    # Use gold background color
+    m.setBackground(goldColor(), 0x000000, -2)
+elif query["img"].value == "1" :
+    # Use silver background color
+    m.setBackground(silverColor(), 0x000000, -2)
+elif query["img"].value == "2" :
+    # Use metallic blue (9898E0) background color
+    m.setBackground(metalColor(0x9898e0), 0x000000, -2)
+elif query["img"].value == "3" :
+    # Use a wood pattern as background color
+    m.setBackground(m.patternColor2(os.path.join(os.path.dirname(sys.argv[0]),
+        "wood.png")), 0x000000, -2)
+elif query["img"].value == "4" :
+    # Use a marble pattern as background color
+    m.setBackground(m.patternColor2(os.path.join(os.path.dirname(sys.argv[0]),
+        "marble.png")), 0x000000, -2)
+else :
+    # Use a solid light purple (EEBBEE) background color
+    m.setBackground(0xeebbee, 0x000000, -2)
+
+# Set the meter center at (100, 235), with radius 210 pixels, and span from -24 to
+# +24 degress
+m.setMeter(100, 235, 210, -24, 24)
+
+# Meter scale is 0 - 100, with a tick every 1 unit
+m.setScale(0, 10, 1)
+
+# Set 0 - 6 as green (99ff99) zone, 6 - 8 as yellow (ffff00) zone, and 8 - 10 as red
+# (ff3333) zone
+m.addZone(0, 6, 0x99ff99, 0x808080)
+m.addZone(6, 8, 0xffff00, 0x808080)
+m.addZone(8, 10, 0xff3333, 0x808080)
+
+# Add a title at the bottom of the meter using 10 pts Arial Bold font
+m.addTitle2(Bottom, "OUTPUT POWER LEVEL\n", "arialbd.ttf", 10)
+
+# Add a semi-transparent black (80000000) pointer at the specified value
+m.addPointer(value, 0x80000000)
+
+# Output the chart
+print("Content-type: image/png\n")
+binaryPrint(m.makeChart2(PNG))</pre></td></tr></table>
+</div>
+<br><hr class="separator"><div class="copyright">&copy; 2014 Advanced Software Engineering Limited. All rights reserved.</div>
+</body>
+</HTML>
